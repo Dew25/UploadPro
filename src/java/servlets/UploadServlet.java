@@ -46,19 +46,27 @@ public class UploadServlet extends HttpServlet {
         
         OutputStream out = null;
         InputStream filecontent = null;
-        
-        out = new FileOutputStream(
-                new File(
-                        pathToImageFolder
-                        +File.separator
-                        +fileName
-                    )
-        );
-        filecontent = filePart.getInputStream();
-        int read = 0;
-        byte[] bytes = new byte[1024];
-        while((read = filecontent.read(bytes)) != -1){
-            out.write(bytes, 0, read);
+        try{
+            out = new FileOutputStream(
+                    new File(
+                            pathToImageFolder
+                            +File.separator
+                            +fileName
+                        )
+            );
+            filecontent = filePart.getInputStream();
+            int read = 0;
+            byte[] bytes = new byte[1024];
+            while((read = filecontent.read(bytes)) != -1){
+                out.write(bytes, 0, read);
+            }
+        }finally{
+            if(out != null){
+                out.close();
+            }
+            if(filecontent != null){
+                filecontent.close();
+            }
         }
         
     }

@@ -17,8 +17,16 @@
             <input type="file" name="file">
             <br>
             <input type="submit" value="Загрузить">
-        </form>
+        </form><br>
+        Файлы, загруженные с сервера-хостинга (localhost)<br>
         <img src ="pic\bar.png">
         <img src="fileServlet/Java-logo-490x301.jpg" height="130px" width="160px">
+        <br>
+        файл с http://da.am
+        <br><img src="http://i.da.am/7787.png">
+        <br>
+        файл с https://radikal.ru
+        <br>
+        <img src="https://a.radikal.ru/a35/1901/43/9c99e630b667.png">
     </body>
 </html>

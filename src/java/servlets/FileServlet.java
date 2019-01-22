@@ -18,6 +18,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import utils.UploadPath;
 
 /**
  *
@@ -41,7 +42,8 @@ public class FileServlet extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         request.setCharacterEncoding("UTF-8");
-        String filePath = "C:\\Users\\melnikov\\Documents\\UploadFolder";
+        //String filePath = "C:\\Users\\melnikov\\Documents\\UploadFolder";
+        String pathToImageFolder = UploadPath.getPath("path");
         // Путь к запрашиваемому файлу.
         String requestedFile = request.getPathInfo();
         // Проверим, действительно ли передан путь в запросе.
@@ -54,7 +56,7 @@ public class FileServlet extends HttpServlet {
         }
         // Создадим объект типа File, при этом декодируем имя файла полученного из request
         // т.к оно может содержать пробелы и другие символы
-        File file = new File(filePath, URLDecoder.decode(requestedFile, "UTF-8"));
+        File file = new File(pathToImageFolder, URLDecoder.decode(requestedFile, "UTF-8"));
         // Проверим, существует ли файл в файловой системе
         if (!file.exists()) {
             response.sendError(HttpServletResponse.SC_NOT_FOUND); // 404.

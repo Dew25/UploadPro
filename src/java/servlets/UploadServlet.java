@@ -10,7 +10,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
@@ -18,6 +19,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
+import utils.UploadPath;
 
 /**
  *
@@ -26,7 +28,7 @@ import javax.servlet.http.Part;
 @WebServlet(name = "UploadServlet", urlPatterns = {"/upload"})
 @MultipartConfig
 public class UploadServlet extends HttpServlet {
-
+   private List<String> listFiles = new ArrayList<>();
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -40,7 +42,8 @@ public class UploadServlet extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         request.setCharacterEncoding("UTF-8");
-        String pathToImageFolder = "C:\\Users\\melnikov\\Documents\\UploadFolder";
+        //String pathToImageFolder = "C:\\Users\\melnikov\\Documents\\UploadFolder";
+        String pathToImageFolder = UploadPath.getPath("path");
         Part filePart = request.getPart("file");
         String fileName = getFileName(filePart);
         
@@ -68,7 +71,22 @@ public class UploadServlet extends HttpServlet {
                 filecontent.close();
             }
         }
+        this.readFiles(new File(pathToImageFolder));
+        request.setAttribute("listFiles", listFiles);
+        request.getRequestDispatcher("/index.jsp").forward(request, response);
         
+    }
+    public void readFiles(File baseDirectory){
+        if (baseDirectory.isDirectory()){
+            for (File file : baseDirectory.listFiles()) {
+                if(file.isFile()){
+                    this.listFiles.add(file.getName() + " файл");
+                }else {
+                    this.listFiles.add(file.getName() + " каталог");
+                    readFiles(file);
+                }
+            }
+        }
     }
     private String getFileName(Part part){
         String partHeader = part.getHeader("content-disposition");
